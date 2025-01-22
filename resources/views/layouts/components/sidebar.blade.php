@@ -6,7 +6,7 @@
           alt="AdminLTE Logo"
           class="brand-image opacity-75 shadow"
         />
-        <span class="brand-text fw-light">AdminLTE 4</span>
+        <span class="brand-text fw-light">Product-Management</span>
       </a>
     </div>
     <div class="sidebar-wrapper">
@@ -18,7 +18,13 @@
           data-accordion="false"
         >
         <li class="nav-item">
-            <a href="./generate/theme.html" class="nav-link">
+            <a href="{{ route('category') }}" class="nav-link">
+              <i class="nav-icon bi bi-palette"></i>
+              <p>Category</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="{{ route( 'product') }}" class="nav-link">
               <i class="nav-icon bi bi-palette"></i>
               <p>Product</p>
             </a>

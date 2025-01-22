@@ -15,10 +15,10 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('category_id');
             $table->string('name');
-            $table->text('description');
+            $table->text('description')->nullable()->default(null);
             $table->decimal('price',10,2);
             $table->integer('stock_quantity')->default(0);
-            $table->string('image');
+            $table->string('image')->nullable()->default(null);
             $table->timestamps();
 
             $table->foreign('category_id')->references('id')->on('categories')->onUpdate('cascade')->onDelete('cascade');

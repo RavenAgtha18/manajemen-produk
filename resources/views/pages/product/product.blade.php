@@ -15,16 +15,20 @@
 <div class="row">
     <div class="col">
         <div class="card mb-4">
+          <div class="card-header d-flex justify-content-end">
+            <a href="/product/create" class="btn btn-primary btn-sm">Add Product</a>
+          </div>
             <div class="card-body p-0">
               <table class="table table-striped table-bordered">
                 <thead>
                   <tr>
                     <th style="width: 10px">No</th>
                     <th>Category</th>
-                    <th>Product</th>
+                    <th>Product Name</th>
                     <th>Description</th>
                     <th>Price</th>
                     <th>Stock</th>
+                    <th>Actions</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -36,6 +40,16 @@
                             <td>{{ $product->description }}</td>
                             <td>{{ $product->price }}</td>
                             <td>{{ $product->stock_quantity }}</td>
+                            <td>
+                             <div class="d-flex">
+                              <a href="{{ route('product.edit', $product->id) }}" class="btn btn-warning btn-sm me-2">Edit</a>
+                              <form action="{{ route('product.destroy', $product->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this product?');">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                            </form>
+                             </div>
+                            </td>
                         </tr>
                     @endforeach
                 </tbody>
