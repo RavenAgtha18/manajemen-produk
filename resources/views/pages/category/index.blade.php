@@ -29,7 +29,7 @@
                 <tbody>
                     @foreach ($categories as $category)
                         <tr>
-                            <td>{{ $loop->iteration }}</td>
+                          <td>{{ ($categories->currentPage() - 1) * $categories->perPage() + $loop->index + 1 }}</td>
                             <td>{{ $category->name }}</td>
                             <td>
                              <div class="d-flex">
@@ -46,7 +46,9 @@
                 </tbody>
               </table>
             </div>
-
+            <div class="card-footer">
+              {{ $categories->links('pagination::bootstrap-5') }}
+            </div>
           </div>
     </div>
 </div>

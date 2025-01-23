@@ -18,6 +18,12 @@
           data-accordion="false"
         >
         <li class="nav-item">
+          <a href="{{ route('dashboard') }}" class="nav-link">
+            <i class="nav-icon bi bi-palette"></i>
+            <p>Dashboard</p>
+          </a>
+        </li>
+        <li class="nav-item">
             <a href="{{ route('category') }}" class="nav-link">
               <i class="nav-icon bi bi-palette"></i>
               <p>Category</p>
