@@ -35,6 +35,18 @@
               <p>Product</p>
             </a>
           </li>
+          <li class="nav-item">
+            <a href="{{ route( 'stock') }}" class="nav-link">
+              <i class="nav-icon bi bi-palette"></i>
+              <p>Stock</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="{{ route( 'purchase') }}" class="nav-link">
+              <i class="nav-icon bi bi-palette"></i>
+              <p>Purchase</p>
+            </a>
+          </li>
         </ul>
       </nav>
     </div>

@@ -4,77 +4,72 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use App\Models\Category;
-use Illuminate\Auth\Events\Validated;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        $products = Product::with('category')->get();
-        log::debug($products);
+        $products = Product::with('category')->paginate(10);
         return view("pages.product.product", compact("products"));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         $categories = Category::all();
         return view("pages.product.create", compact("categories"));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        log::debug($request->all());
-        $validate = $request->validate([
-            "category_id"=>"required",
-            "name"=> "required",
-            "description"=> "nullable",
-            "price"=> "required",
-            "stock"=>"required",
-            "image_file"=> "nullable",
-        ]) ;
-        Product::create([
-            "category_id"=> $request->category_id,
-            "name"=> $request->name,
-            "description"=> $request->description,
-            "price"=> $request->price,
-            "stock_quantity"=> $request->stock,
-            "image"=> $request->image_file,
+        $validatedData = $request->validate([
+            "category_id" => "required",
+            "name" => "required",
+            "description" => "nullable",
+            "price" => "required|numeric",
+            "stock" => "required|integer",
+            "image_file" => "nullable|image|mimes:jpeg,png,jpg,gif|max:2048",
         ]);
-        return redirect()->route("product")->with("success","");
+    
+        $imagePath = null;
+        if ($request->hasFile('image_file')) {
+            $image = $request->file('image_file');
+            
+            $originalName = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
+            $extension = $image->getClientOriginalExtension();
+            
+            $newFileName = $originalName . '_' . time() . '.' . $extension;
+            
+            $imagePath = $image->storeAs('product_images', $newFileName, 'public');
+        }
+    Log::debug( $imagePath);
+        Product::create([
+            "category_id" => $validatedData['category_id'],
+            "name" => $validatedData['name'],
+            "description" => $validatedData['description'],
+            "price" => $validatedData['price'],
+            "stock_quantity" => $validatedData['stock'],
+            "image" => $imagePath,
+        ]);
+    
+        return redirect()->route("product")->with("success", "Product added successfully");
     }
-
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id)
     {
-        //
+        $product = Product::with('category')->findOrFail($id);
+        log::debug($product);
+        return view('pages.product.show', compact('product'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(string $id)
     {
         $categories = Category::all();
         $product = Product::findOrFail($id);
-        return view("pages.product.edit",  compact("categories","product"));
+        return view("pages.product.edit", compact("categories", "product"));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, string $id)
     {
         $validatedData = $request->validate([
@@ -87,26 +82,42 @@ class ProductController extends Controller
         ]);
 
         $product = Product::findOrFail($id);
-    
+
+        if ($request->hasFile('image_file')) {
+
+            if ($product->image_file) {
+                Storage::disk('public')->delete($product->image_file);
+            }
+
+
+            $imagePath = $request->file('image_file')->store('product_images', 'public');
+        } else {
+  
+            $imagePath = $product->image_file;
+        }
+
         $product->update([
             "category_id" => $validatedData['category_id'],
             "name" => $validatedData['name'],
             "description" => $validatedData['description'],
             "price" => $validatedData['price'],
             "stock_quantity" => $validatedData['stock'],
-            "image" => $validatedData['image_file'],
+            "image_file" => $imagePath,
         ]);
-    
-        return redirect()->route("product")->with("success", "Product updated successfully.");
-    }
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-{
-    $product = Product::findOrFail($id); 
-    $product->delete();
 
-    return redirect()->route('product')->with('success', 'Product deleted successfully.');
-}
+        return redirect()->route("product")->with("success", "Product updated successfully");
+    }
+
+    public function destroy(string $id)
+    {
+        $product = Product::findOrFail($id);
+        
+        if ($product->image_file) {
+            Storage::disk('public')->delete($product->image_file);
+        }
+
+        $product->delete();
+
+        return redirect()->route('product')->with('success', 'Product deleted successfully');
+    }
 }

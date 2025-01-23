@@ -20,74 +20,74 @@
             <div class="card-body p-0">
             <div class="card card-primary card-outline mb-4">
                   <div class="card-header"><div class="card-title">Add Product</div></div>
-                  <form action="/product/store" method="POST">
+                  <form action="/product/store" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="card-body">
-                    <div class="mb-3">
-                        <label for="category_id" class="form-label">Category</label>
-                        <select name="category_id" id="category_id" class="form-control">
-                        @foreach ($categories as $category)
-                        <option value="{{ $category->id }}">{{ $category->name }}</option>
-                        @endforeach
-                        </select>
-                      </div>
-                      <div class="mb-3">
-                        <label for="name" class="form-label">Product Name</label>
-                        <input
-                            type="text"
-                            class="form-control @error('name') is-invalid @enderror"
-                            id="name"
-                            name="name"
-                            value="{{ old('name') }}" 
-                        />
-                        @error('name')
-                            <span class="invalid-feedback">{{ $message }}</span>
-                        @enderror
-                    </div>
-                    <div class="mb-3">
-                      <label for="description" class="form-label">Description</label>
-                      <textarea name="description" id="description" class="form-control">{{ old('description') }}</textarea>
-                  </div>
-                      <div class="mb-3">
-                        <label for="price" class="form-label">Price</label>
-                        <input
-                          type="number"
-                           class="form-control @error('price') is-invalid @enderror"
-                          id="price"
-                          inputmode="numeric"
-                          name="price"
-                          value="{{ old('price') }}" 
-                        />
-                        @error('price')
-                        <span class="invalid-feedback">{{ $message }}</span>
-                        @enderror
-                      </div>
-                      <div class="mb-3">
-                        <label for="stock" class="form-label">Stock</label>
-                        <input
-                          type="number"
-                          class="form-control @error('stock') is-invalid @enderror"
-                          id="stock"
-                          inputmode="numeric"
-                          name="stock"
-                          value="{{ old('stock') }}" 
-                        />
-                        @error('stock')
-                        <span class="invalid-feedback">{{ $message }}</span>
-                       @enderror
-                      </div>
-                      <div class="input-group mb-3">
-                        <input type="file" class="form-control" name="image_file" id="image_file" />
-                        <label class="input-group-text" for="image_file">Upload</label>
-                      </div>
+                        <div class="mb-3">
+                            <label for="category_id" class="form-label">Category</label>
+                            <select name="category_id" id="category_id" class="form-control">
+                                @foreach ($categories as $category)
+                                    <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Product Name</label>
+                            <input
+                                type="text"
+                                class="form-control @error('name') is-invalid @enderror"
+                                id="name"
+                                name="name"
+                                value="{{ old('name') }}" 
+                            />
+                            @error('name')
+                                <span class="invalid-feedback">{{ $message }}</span>
+                            @enderror
+                        </div>
+                        <div class="mb-3">
+                            <label for="description" class="form-label">Description</label>
+                            <textarea name="description" id="description" class="form-control">{{ old('description') }}</textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="price" class="form-label">Price</label>
+                            <input
+                                type="number"
+                                class="form-control @error('price') is-invalid @enderror"
+                                id="price"
+                                inputmode="numeric"
+                                name="price"
+                                value="{{ old('price') }}" 
+                            />
+                            @error('price')
+                                <span class="invalid-feedback">{{ $message }}</span>
+                            @enderror
+                        </div>
+                        <div class="mb-3">
+                            <label for="stock" class="form-label">Stock</label>
+                            <input
+                                type="number"
+                                class="form-control @error('stock') is-invalid @enderror"
+                                id="stock"
+                                inputmode="numeric"
+                                name="stock"
+                                value="{{ old('stock') }}" 
+                            />
+                            @error('stock')
+                                <span class="invalid-feedback">{{ $message }}</span>
+                            @enderror
+                        </div>
+                        <div class="mb-3">
+                            <label for="image_file" class="form-label">Product Image</label>
+                            <input type="file" name="image_file" id="image_file" class="form-control" accept="image/*">
+                        </div>
                     </div>
                     <div class="card-footer">
-                      <div class="d-flex justify-content-end">
-                        <a href="/product" class="btn btn-outline-secondary me-2">Cancel</a>
-                        <button type="submit" class="btn btn-primary">Submit</button>
-                      </div>
+                        <div class="d-flex justify-content-end">
+                            <a href="/product" class="btn btn-outline-secondary me-2">Cancel</a>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
                     </div>
-                  </form>
+                </form>
                 </div>
             </div>
 

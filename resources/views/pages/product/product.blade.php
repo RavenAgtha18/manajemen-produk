@@ -34,7 +34,7 @@
                 <tbody>
                     @foreach ($products as $product)
                         <tr>
-                            <td>{{ $loop->iteration }}</td>
+                          <td>{{ ($products->currentPage() - 1) * $products->perPage() + $loop->index + 1 }}</td>
                             <td>{{ $product->category->name }}</td>
                             <td>{{ $product->name }}</td>
                             <td>{{ $product->description }}</td>
@@ -43,6 +43,7 @@
                             <td>
                              <div class="d-flex">
                               <a href="{{ route('product.edit', $product->id) }}" class="btn btn-warning btn-sm me-2">Edit</a>
+                              <a href="{{ route('product.show', $product->id) }}" class="btn btn-info btn-sm me-2">Show</a>
                               <form action="{{ route('product.destroy', $product->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this product?');">
                                 @csrf
                                 @method('DELETE')
@@ -55,7 +56,9 @@
                 </tbody>
               </table>
             </div>
-
+            <div class="card-footer">
+              {{ $products->links('pagination::bootstrap-5') }}
+            </div>
           </div>
     </div>
 </div>
