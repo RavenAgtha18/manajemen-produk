@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use App\Exports\ProductExport;
+use App\Imports\ProductImport;
 use Illuminate\Support\Facades\Log;
+use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
@@ -14,6 +17,22 @@ class ProductController extends Controller
     {
         $products = Product::with('category')->paginate(10);
         return view("pages.product.product", compact("products"));
+    }
+    public function export()
+    {
+        return Excel::download(new ProductExport, 'product.xlsx');
+    }
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,csv,xls',
+        ]);
+        try {
+            Excel::import(new ProductImport, $request->file('file'));
+            return redirect()->back()->with('success', 'Products imported successfully.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Error importing products: ' . $e->getMessage());
+        }
     }
 
     public function create()

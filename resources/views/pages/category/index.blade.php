@@ -16,8 +16,12 @@
 <div class="row">
     <div class="col">
         <div class="card mb-4">
-            <div class="card-header d-flex justify-content-end">
-                <a href="/category/create" class="btn btn-primary btn-sm">Add Category</a>
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Category Management</h5>
+                <div>
+                    <a href="/category-export" class="btn btn-success btn-sm me-2">Export Category</a>
+                    <a href="/category/create" class="btn btn-primary btn-sm me-2">Add Category</a>
+                </div>
             </div>
             <div class="card-body p-0">
                 <table class="table table-striped table-bordered">
@@ -36,10 +40,9 @@
                                 <td>
                                   <div class="d-flex">
                                       <a href="{{ route('category.edit', $category->id) }}" class="btn btn-warning btn-sm me-2">Edit</a>
-                                      <button class="btn btn-info btn-sm me-2" data-bs-toggle="modal" data-bs-target="#showCategoryModal" 
-                                          data-name="{{ $category->name }}">
-                                          Show
-                                      </button>
+                                      <form action="{{ route('category.show', $category->id) }}" method="GET" class="me-2">
+                                          <button type="submit" class="btn btn-info btn-sm">Show</button>
+                                      </form>
                                       <form action="{{ route('category.destroy', $category->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this product?');">
                                           @csrf
                                           @method('DELETE')
@@ -60,6 +63,7 @@
 </div>
 
 <!-- Modal -->
+@if(session('category')) 
 <div class="modal fade" id="showCategoryModal" tabindex="-1" aria-labelledby="showCategoryModalLabel" aria-hidden="true">
   <div class="modal-dialog">
       <div class="modal-content">
@@ -68,7 +72,7 @@
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
-              <p><strong>Category Name:</strong> <span id="categoryName"></span></p>
+              <p><strong>Category Name:</strong> {{ session('category')->name }}</p>
           </div>
           <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -77,18 +81,12 @@
   </div>
 </div>
 
-@endsection
-
-@section('scripts')
 <script>
-  // Event listener untuk modal
-  var showCategoryModal = document.getElementById('showCategoryModal');
-  showCategoryModal.addEventListener('show.bs.modal', function (event) {
-      var button = event.relatedTarget; 
-      var name = button.getAttribute('data-name'); 
-
-      var categoryName = showCategoryModal.querySelector('#categoryName');
-      categoryName.textContent = name; 
-  });
+    document.addEventListener('DOMContentLoaded', function () {
+        const modal = new bootstrap.Modal(document.getElementById('showCategoryModal'));
+        modal.show();
+    });
 </script>
+@endif
+
 @endsection

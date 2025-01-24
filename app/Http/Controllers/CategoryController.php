@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use Illuminate\Http\Request;
+use App\Exports\CategoryExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class CategoryController extends Controller
 {
@@ -14,6 +16,10 @@ class CategoryController extends Controller
     {
         $categories = Category::paginate(10);
         return view("pages.category.index", compact("categories"));
+    }
+    public function export()
+    {
+        return Excel::download(new CategoryExport, 'category.xlsx');
     }
 
     /**
@@ -41,9 +47,11 @@ class CategoryController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($id )
     {
-        //
+        $category = Category::findOrFail($id);
+        session()->flash('category', $category); 
+        return redirect()->route('category'); 
     }
 
     /**

@@ -21,6 +21,8 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/product/{id}', [ProductController::class, 'update'])->name('product.update');
     Route::delete('/product/{id}', [ProductController::class, 'destroy'])->name('product.destroy');
     Route::get('/product/{product}', [ProductController::class, 'show'])->name('product.show');
+    Route::get('/product-export', [ProductController::class, 'export'])->name('product.export');
+    Route::post('/product/import', [ProductController::class, 'import'])->name('product.import');
 
     Route::get('/category', [CategoryController::class, 'index'])->name('category');
     Route::get('/category/create', [CategoryController::class, 'create'])->name('category.create');
@@ -28,6 +30,8 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/category/store', [CategoryController::class, 'store'])->name('category.store');
     Route::put('/category/{id}', [CategoryController::class, 'update'])->name('category.update');
     Route::delete('/category/{id}', [CategoryController::class, 'destroy'])->name('category.destroy');
+    Route::get('/category-export', [CategoryController::class, 'export'])->name('category.export');
+    Route::get('/category/{id}', [CategoryController::class, 'show'])->name('category.show');
 
     Route::get('/stock',   [StockController::class, 'index'])->name('stock');
     Route::get('/stock/create',  [StockController::class, 'create'])->name('stock.create');
